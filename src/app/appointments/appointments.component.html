@@ -1,0 +1,77 @@
+
+<div fxLayout="row" fxLayoutAlign="end center" >
+    <button routerLink="/create" mat-raised-button color="primary">Create New</button>
+   
+</div>
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+</mat-form-field>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="1">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+  
+    <!-- Name Column -->
+    <ng-container matColumnDef="2">
+      <th mat-header-cell *matHeaderCellDef> ID Patient </th>
+      <td mat-cell *matCellDef="let element"> {{element.patient_id}} </td>
+    </ng-container>
+  
+    <!-- Weight Column -->
+    <ng-container matColumnDef="3">
+      <th mat-header-cell *matHeaderCellDef> ID Docteur </th>
+      <td mat-cell *matCellDef="let element"> {{element.doctor_id}} </td>
+    </ng-container>
+  
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="4">
+      <th mat-header-cell *matHeaderCellDef> Date RDV </th>
+      <td mat-cell *matCellDef="let element"> {{element.appointment_date}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="5">
+        <th mat-header-cell *matHeaderCellDef> Raison </th>
+        <td mat-cell *matCellDef="let element"> {{element.reason}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="6">
+        <th mat-header-cell *matHeaderCellDef> Statut </th>
+        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+      </ng-container>
+      <ng-container matColumnDef="7">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let element">
+          <button routerLink="/{{element.id}}/edit" >
+            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="edit" ></mat-icon>
+
+          </button>
+
+          <button (click)="deleteAppointment(element.id)" >
+            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="delete" ></mat-icon>
+          </button> 
+          
+          
+
+
+
+
+
+
+
+
+
+
+
+          
+        </td>
+        
+      </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
+  
