@@ -1,2 +1,9 @@
-
-<router-outlet></router-outlet>
+<ng-container *ngIf="shouldDisplayRouterOutlet(); else noRouterOutlet">
+    <app-layout>
+      <router-outlet></router-outlet>
+    </app-layout>
+  </ng-container>
+  <ng-template #noRouterOutlet>
+    <router-outlet></router-outlet>
+  </ng-template>
+  

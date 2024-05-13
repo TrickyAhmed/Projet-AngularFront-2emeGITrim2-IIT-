@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content [formGroup]="form" class="dialog-content">
+
+  <mat-form-field class="full-width">
+    <mat-label>Prénom</mat-label>
+    <input matInput placeholder="Prénom" formControlName="first_name">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Nom</mat-label>
+    <input matInput placeholder="Nom" formControlName="last_name">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Date de naissance</mat-label>
+    <input matInput [matDatepicker]="picker" placeholder="EX : 2024-04-17" formControlName="date_of_birth">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Sexe</mat-label>
+    <mat-select formControlName="gender">
+      <mat-option value="Male">Male</mat-option>
+      <mat-option value="Female">Femelle</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Adresse</mat-label>
+    <input matInput placeholder="Adresse" formControlName="address">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>N° Téléphone</mat-label>
+    <input matInput placeholder="N° Téléphone" formControlName="phone">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Adresse Email</mat-label>
+    <input matInput placeholder="Adresse Email" formControlName="email">
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="close()" class="dialog-button">Fermer</button>
+  <button mat-button (click)="save()" class="dialog-button">Enregistrer</button>
+</mat-dialog-actions>

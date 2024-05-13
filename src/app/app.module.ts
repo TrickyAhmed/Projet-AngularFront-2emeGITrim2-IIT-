@@ -20,6 +20,24 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableModule } from '@angular/material/table'  
+import { provideHttpClient , withFetch  } from '@angular/common/http';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CreatePatientComponent } from './create-patient/create-patient.component';
+import { CreateRDVComponent } from './create-rdv/create-rdv.component';
+import { CreateRecordComponent } from './create-record/create-record.component';
+import { ChangeDetectorRef } from '@angular/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSelectModule} from '@angular/material/select';
+import { MatNativeDateModule } from '@angular/material/core'; // Import MatNativeDateModule
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './guards/auth.guard'; 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,12 +45,23 @@ import { MatTableModule } from '@angular/material/table'
     NotFoundComponent,
     LayoutComponent,
     AcceuilComponent,
-    AppointmentsComponent,
+    AppointmentsComponent,  
     RecordsComponent,
+    ConfirmationComponent,
+    CreatePatientComponent,
+    CreateRDVComponent,
+    CreateRecordComponent,
+    LoginComponent
+    
 
    
   ],
   imports: [
+    FormsModule,
+    MatPaginatorModule,
+    FontAwesomeModule,
+    MatSelectModule,
+    MatDatepickerModule,
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
@@ -46,12 +75,18 @@ import { MatTableModule } from '@angular/material/table'
     MatInputModule,
     MatFormFieldModule,
     MatTableModule,
+    HttpClientModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatNativeDateModule
 
   ],
   providers: [
+    AuthGuard,
     provideClientHydration(),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    provideHttpClient(withFetch())
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

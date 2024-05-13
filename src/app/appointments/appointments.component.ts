@@ -6,6 +6,9 @@ import { Appointments } from '../Modeles/Appointments';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator'; 
 import { MatSort } from '@angular/material/sort'; 
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationComponent } from '../confirmation/confirmation.component';
+import { PatientService } from '../Services/Patient.service';
 
 
 @Component({
@@ -15,8 +18,14 @@ import { MatSort } from '@angular/material/sort';
 })
 
 export class AppointmentsComponent implements OnInit {
-  constructor(private AS: AppointmentsService, private router: Router, private activatedRoute: ActivatedRoute) { }
-  displayedColumns: string[] = ['id', 'patient_id', 'doctor_id', 'appointment_date', 'reason', 'status' , 'actions'];
+AjouterRDV() {
+throw new Error('Method not implemented.');
+}
+openDialogForEdit(arg0: any) {
+throw new Error('Method not implemented.');
+}
+  constructor(private PS: PatientService , private AS: AppointmentsService, private router: Router, private activatedRoute: ActivatedRoute, private dialog:MatDialog) { }
+  displayedColumns: string[] = ['id', 'patient_id', 'appointment_date', 'reason', 'status' , 'actions'];
   form!: FormGroup;
   appointments: Appointments[] = []; 
   dataSource = new MatTableDataSource<Appointments>(this.appointments);
@@ -24,38 +33,63 @@ export class AppointmentsComponent implements OnInit {
     const idFromUrl = this.activatedRoute.snapshot.params['id'];
 
     if (!!idFromUrl) {
-      this.AS.GetAppointmentByID(idFromUrl).subscribe((appointment) => {
+      this.getAppointments();
+      this.AS.getAppointmentByID(idFromUrl).subscribe((appointment) => {
         this.initFormForEdit(appointment);
       });
     } else {
+      this.getAppointments();
       this.initFormForAdd();
+      
     }
   }
 
   addAppointment(): void {
     const appointmentToSave = this.form.value;
-    this.AS.AjouterAppointment(appointmentToSave).subscribe(() => {
+    this.AS.ajouterAppointment(appointmentToSave).subscribe(() => {
       this.router.navigate(['/appointments']);
     });
   }
 
   getAppointments(): void {
-    this.AS.GetAppointments().subscribe((appointments) => {
-      this.appointments = appointments;
-      this.dataSource.data = this.appointments; 
+    this.AS.getAppointments().subscribe((appointments) => {
+      // Loop through each appointment
+      appointments.forEach((appointment) => {
+        // Retrieve patient details for each appointment
+        this.PS.GetPatientByID(appointment.patient_id).subscribe((patient) => {
+          // Assign patient name and last name to the appointment object
+          appointment.patient_id = patient.first_name  + " " + patient.last_name;;
+        
+          // Add the appointment to the array
+          this.appointments.push(appointment);
+          // Update the data source
+          this.dataSource.data = this.appointments;
+        });
+      });
     });
   }
 
 
   deleteAppointment(id: string): void {
-    this.AS.SupprimerAppointment(id).subscribe(() => {
-      this.router.navigate(['/appointments'])
+    let dialogRef = this.dialog.open(ConfirmationComponent, {
+      height: '1000',
+      width: '3000',
     });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.AS.supprimerAppointment(id).subscribe(() => {
+          this.getAppointments();
+        });
+      }
+    });
+    
   }
+  
 
   UpdateAppointment(): void {
     const UpdateAppointment = this.form.value;
-    this.AS.EditAppointment(UpdateAppointment).subscribe(() => {
+    this.AS.editAppointment(UpdateAppointment).subscribe(() => {
       this.router.navigate(['/appointments']);
     });
   }

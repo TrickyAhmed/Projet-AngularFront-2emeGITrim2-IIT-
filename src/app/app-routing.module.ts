@@ -5,12 +5,14 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AcceuilComponent } from './acceuil/acceuil.component';
 import { RecordsComponent } from './records/records.component';
 import { AppointmentsComponent } from './appointments/appointments.component';
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './guards/auth.guard';  
 
 const routes: Routes = [
   {
     path:'',
     pathMatch:'full',
-    component:AcceuilComponent 
+    component:LoginComponent 
   },
   {
     path:'not',
@@ -20,17 +22,25 @@ const routes: Routes = [
   {
     path:'patients',
     pathMatch:'full',
-    component:PatientsComponent 
+    component:PatientsComponent ,
+   // canActivate : [AuthGuard] 
   },
   {
     path:'records',
     pathMatch:'full',
-    component:RecordsComponent 
+    component:RecordsComponent ,
+    //canActivate : [AuthGuard] 
   },
   {
     path:'appointments',
     pathMatch:'full',
-    component:AppointmentsComponent
+    component:AppointmentsComponent,
+    //canActivate : [AuthGuard] 
+  },
+  {
+    path:'login',
+    pathMatch:'full',
+    component:LoginComponent
   },
 
 

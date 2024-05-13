@@ -1,0 +1,39 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 300px;
+  background-color: #191970; /* Deep blue */
+  color: #fff; /* Text color */
+}
+
+.toolbar {
+  background-color: #4169e1; /* Royal blue */
+  color: #fff; /* Text color */
+  border-bottom: 1px solid #fff; /* White border bottom */
+}
+
+.toolbar-left {
+  display: flex;
+}
+
+.toolbar-link {
+  color: #fff; /* Link color */
+  margin-right: 20px; /* Adjust spacing between links */
+  font-size: 16px; /* Font size */
+  font-weight: bold; /* Bold font */
+  text-transform: uppercase; /* Uppercase text */
+}
+
+.toolbar-link:hover {
+  color: #87ceeb; /* Light blue on hover */
+}
+
+.toolbar-right {
+  margin-left: auto; /* Pushes the logout link to the right */
+}
+
+.main-content {
+  padding: 20px;
+}

@@ -1,0 +1,62 @@
+/* confirmation.component.css */
+
+.confirmation-dialog {
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  width: calc(100% - 80px); /* Adjusted width calculation */
+  max-width: 600px; /* Added max-width for responsiveness */
+  margin: 0 auto;
+  text-align: center;
+  overflow: hidden; /* Hide any overflow content */
+}
+
+.confirmation-dialog h2 {
+  color: #333333;
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+.confirmation-dialog p {
+  color: #666666;
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.button-container button {
+  margin: 0 20px;
+  padding: 15px 40px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.3s ease;
+  background-color: #ff6f61; /* Coral */
+  color: #ffffff;
+  border: none;
+}
+
+.button-container button:hover {
+  transform: scale(1.1);
+  background-color: #ff4d4d; /* Lighter Coral */
+}
+
+button.mat-button[color="warn"] {
+  background-color: #3399ff; /* Dodger Blue */
+}
+
+button.mat-button[color="warn"]:hover {
+  background-color: #1a8cff; /* Darker Dodger Blue */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}

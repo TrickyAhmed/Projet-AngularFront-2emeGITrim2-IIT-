@@ -18,14 +18,14 @@ export class PatientService {
         return this.httpClient.delete<void>(`http://localhost:8000/api/Patient/${id}`);
     }
 
-    AjouterPatient(Patient: any): Observable<any> {
+    AjouterPatient(Patient: any): Observable<Patients> {
 
         const PatientAajouter = {
             ...Patient,
             id: Math.ceil(Math.random() * 1000),
             createdDate: new Date().toISOString()
         }
-        return this.httpClient.post<any>('http://localhost:8000/api/Patient', PatientAajouter);
+        return this.httpClient.post<Patients>('http://localhost:8000/api/Patient', PatientAajouter);
 
     }
 
@@ -33,8 +33,8 @@ export class PatientService {
         return this.httpClient.get<Patients>(`http://localhost:8000/api/Patient/${id}`)
     }
 
-    EditAppointment(Patient: Patients): Observable<Patients> {
-        return this.httpClient.put<Patients>(`http://localhost:8000/api/Appointment/${Patient.id}`, Patient);
+    EditPatient(id: string ,Patient: Patients): Observable<Patients> {
+        return this.httpClient.put<Patients>(`http://localhost:8000/api/Patient/${id}`, Patient);
     }
 
 

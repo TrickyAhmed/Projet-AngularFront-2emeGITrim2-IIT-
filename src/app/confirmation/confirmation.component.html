@@ -1,0 +1,10 @@
+<!-- confirmation.component.html -->
+<div class="confirmation-dialog">
+    <h2>{{ title }}</h2>
+    <p>{{ content }}</p>
+    <div class="button-container">
+      <button mat-button (click)="onCancel()">{{ Cancel }}</button>
+      <button mat-button color="warn" (click)="onDelete()">{{ Delete }}</button>
+    </div>
+  </div>
+  

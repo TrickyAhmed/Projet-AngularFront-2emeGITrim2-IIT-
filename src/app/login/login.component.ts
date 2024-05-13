@@ -1,29 +1,50 @@
-import {Component} from '@angular/core';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
 import { Router } from '@angular/router';
-
-/**
- * @title Card with multiple sections
- */
+import { Component } from '@angular/core';
+import { ILogin } from '../interfaces/Login';  
+import { AuthService } from '../../app/Services/auth.service' 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 @Component({
-  selector: 'Login',
-  templateUrl: 'login.component.html',
-  styleUrls: ['login.component.css'],
-  standalone: true,
-  imports: [MatCardModule, MatButtonModule],
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  constructor( private AUTH:AuthService, private router:Router ){}
-signin(){
-  this.AUTH.doGoogleLogin().then(()=>{
-    this.router.navigate(['/members'])
-  })
-}
-logout(){
-  this.AUTH.doLogout().then(() => {
-    this.router.navigate(['/login']); 
-  })
-}
+  username: string = ''; // Déclaration de la propriété 'username'
+  password: string = ''; // Déclaration de la propriété 'password'
+
+  constructor(private formBuilder : FormBuilder,  
+    private router : Router,  
+    private authService : AuthService ) { }
+    model: ILogin = { userid: "arij", password: "arij" }  
+
+    loginForm!: FormGroup;  
+    message!: string;  
+    returnUrl: string  = '/patients';  
+
+    ngOnInit() {  
+      this.loginForm = this.formBuilder.group({  
+        userid: ['', Validators.required],  
+        password: ['', Validators.required]  
+      });  
+      this.returnUrl = '/patients';  
+      this.authService.logout();  
+    }  
+
+   
+
+  onSubmit(): void {
+      if (this.username == this.model.userid && this.password == this.model.password) {  
+        console.log("Login successful");  
+        //this.authService.authLogin(this.model);  
+        localStorage.setItem('isLoggedIn', "true");  
+        localStorage.setItem('token', this.model.userid);  
+        this.router.navigate([this.returnUrl]);  
+      }  
+      else {  
+        this.message = "Please check your userid and password";  
+      }  
+    
+  }
+
   
 }
