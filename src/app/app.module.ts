@@ -40,7 +40,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { LineChartComponent } from './components/line-chart/line-chart.component';
-
+import { NgChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,6 +61,7 @@ import { LineChartComponent } from './components/line-chart/line-chart.component
    
   ],
   imports: [
+    NgChartsModule,
     BaseChartDirective,
     FormsModule,
     MatPaginatorModule,
@@ -85,6 +86,7 @@ import { LineChartComponent } from './components/line-chart/line-chart.component
     MatDialogModule,
     MatNativeDateModule,
     CommonModule
+    
 
   ],
   providers: [

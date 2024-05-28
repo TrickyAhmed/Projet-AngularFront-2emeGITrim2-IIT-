@@ -8,3 +8,13 @@
   
     <hr class="mb-2">
   </div>
+
+  <div class="chart-wrapper">
+    <canvas baseChart
+            [type]="'barController'"
+      [datasets]="chartData"
+      [labels]="chartLabels"
+      [options]="chartOptions"
+      >
+    </canvas>
+  </div>
