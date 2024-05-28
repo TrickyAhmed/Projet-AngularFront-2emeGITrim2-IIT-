@@ -33,8 +33,10 @@ export class RecordsService {
         return this.httpClient.get<Records>(`http://localhost:8000/api/MedicalRecord/${id}`)
     }
 
-    EditAppointment(Record: Records): Observable<Records> {
-        return this.httpClient.put<Records>(`http://localhost:8000/api/Appointment/${Record.id}`, Record);
+    
+
+    EditMedicalRecord(id: string , Record: Records): Observable<Records> {
+        return this.httpClient.put<Records>(`http://localhost:8000/api/MedicalRecord/${id}`, Record);
     }
 
 }

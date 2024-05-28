@@ -1,1 +1,30 @@
-<p>create-record works!</p>
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content [formGroup]="form" class="dialog-content">
+
+  <mat-form-field class="full-width">
+    <mat-label>Nom et Prenom</mat-label>
+    <input matInput placeholder="Nom et Prenom" formControlName="patient_id">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Diagnostic</mat-label>
+    <input matInput placeholder="Diagnostic" formControlName="diagnosis">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Prescription</mat-label>
+    <input matInput placeholder="Prescription" formControlName="prescription">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Notes Supplémentaires</mat-label>
+    <input matInput placeholder="Note" formControlName="notes">
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="close()" class="dialog-button">Fermer</button>
+  <button mat-button (click)="save()" class="dialog-button">Enregistrer</button>
+</mat-dialog-actions>

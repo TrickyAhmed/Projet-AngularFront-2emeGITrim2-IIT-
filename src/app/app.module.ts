@@ -37,6 +37,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './guards/auth.guard'; 
+import { CommonModule } from '@angular/common';
+import { BaseChartDirective } from 'ng2-charts';
+import { LineChartComponent } from './components/line-chart/line-chart.component';
 
 @NgModule({
   declarations: [
@@ -51,12 +54,14 @@ import { AuthGuard } from './guards/auth.guard';
     CreatePatientComponent,
     CreateRDVComponent,
     CreateRecordComponent,
-    LoginComponent
+    LoginComponent,
+    LineChartComponent
     
 
    
   ],
   imports: [
+    BaseChartDirective,
     FormsModule,
     MatPaginatorModule,
     FontAwesomeModule,
@@ -78,7 +83,8 @@ import { AuthGuard } from './guards/auth.guard';
     HttpClientModule,
     MatButtonModule,
     MatDialogModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    CommonModule
 
   ],
   providers: [

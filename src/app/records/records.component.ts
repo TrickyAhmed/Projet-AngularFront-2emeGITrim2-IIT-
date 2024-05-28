@@ -1,31 +1,73 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Records } from '../Modeles/Records';
 import { RecordsService } from '../Services/Records.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ConfirmationComponent } from '../confirmation/confirmation.component';
 import { PatientService } from '../Services/Patient.service';
-
+import { CreateRecordComponent } from '../create-record/create-record.component';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 @Component({
   selector: 'app-records',
   templateUrl: './records.component.html',
   styleUrls: ['./records.component.css']
 })
 export class RecordsComponent implements OnInit {
-AjouterRecord() {
-throw new Error('Method not implemented.');
-}
-openDialogForEdit(arg0: any) {
-throw new Error('Method not implemented.');
-}
+  AjouterRecord() {
+    console.log('Entering AjouterPatient() method');
+    const dialogConfig = new MatDialogConfig();
+  
+    dialogConfig.width = '1000';
+    dialogConfig.height = '1000';
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.closeOnNavigation = true;
+    dialogConfig.panelClass = 'center-dialog';
+    console.log('Dialog configuration set up');
+  
+    const dialogRef = this.dialog.open(CreateRecordComponent, dialogConfig);
+    console.log('Dialog opened');
+  
+    dialogRef.afterClosed().subscribe(result => {
+        console.log('Dialog closed with result:', result);
+        if (result === 'success') {
+            console.log('Result is success. Calling getRecord()');
+            this.getRecords();
+        } else {
+            console.log('Result is not success.');
+        }
+    });
+  }
+  openDialogForEdit(id: string): void {
+    const dialogConfig = new MatDialogConfig();
+  
+    dialogConfig.width = '1000';
+    dialogConfig.height = '3000';
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.closeOnNavigation = true;
+    dialogConfig.panelClass = 'center-dialog';
+    dialogConfig.data = { id: id }; 
+    const dialogRef = this.dialog.open(CreateRecordComponent, dialogConfig);
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed with result:', result);
+      if (result === 'success') {
+        this.getRecords();
+      }
+    });
+  
+  }
   constructor(private PS: PatientService,private RS: RecordsService, private dialog: MatDialog, private router: Router, private activatedRoute: ActivatedRoute) { }
   displayedColumns: string[] = ['id', 'patient_id', 'diagnosis', 'prescription', 'notes','actions'];
   Records: Records[] = []; 
   dataSource = new MatTableDataSource<Records>(this.Records);
   form!: FormGroup;
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
     const idFromUrl = this.activatedRoute.snapshot.params['id'];
@@ -40,6 +82,12 @@ throw new Error('Method not implemented.');
       this.initFormForAdd();
     }
   }
+
+  onPageChange(event: PageEvent): void {
+    this.paginator.pageIndex = event.pageIndex;
+    this.paginator.pageSize = event.pageSize;
+    this.getRecords();
+  } 
 
   addRecord(): void {
     const recordToSave = this.form.value;
@@ -64,27 +112,23 @@ throw new Error('Method not implemented.');
     
   }
 
-  updateRecord(): void {
-    const updatedRecord = this.form.value;
-    this.RS.EditAppointment(updatedRecord).subscribe(() => {
-      this.router.navigate(['/records']);
-    });
-  }
-
-  
   getRecords(): void {
     this.RS.GetRecords().subscribe((records) => {
-      // Loop through each record
-      records.forEach((record) => {
-        // Retrieve patient details for each record
-        this.PS.GetPatientByID(record.patient_id).subscribe((patient) => {
-          // Assign patient name to the record object
-          record.patient_id = patient.first_name + " " + patient.last_name;
-          // Add the record to the array
-          this.Records.push(record);
-          // Update the data source
-          this.dataSource.data = this.Records;
+      const observables = records.map(record =>
+        this.PS.GetPatientByID(record.patient_id)
+      );
+  
+      forkJoin(observables).subscribe(patients => {
+        records.forEach((record, index) => {
+          record.patient_id = patients[index].first_name + " " + patients[index].last_name;
         });
+  
+        // Assign records to the array
+        this.Records = records;
+  
+        // Update the data source
+        this.dataSource.data = this.Records;
+        this.dataSource.paginator = this.paginator;
       });
     });
   }

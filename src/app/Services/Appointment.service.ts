@@ -34,8 +34,8 @@ export class AppointmentsService {
     );
   }
 
-  editAppointment(appointment: Appointments): Observable<Appointments> {
-    return this.httpClient.put<Appointments>(`http://localhost:8000/api/Appointment/${appointment.id}`, appointment).pipe(
+  editAppointment(id: string ,appointment: Appointments): Observable<Appointments> {
+    return this.httpClient.put<Appointments>(`http://localhost:8000/api/Appointment/${id}`, appointment).pipe(
       catchError(this.handleError)
     );
   }

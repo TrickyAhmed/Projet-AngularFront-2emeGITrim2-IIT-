@@ -1,34 +1,33 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { AppointmentsService } from '../Services/Appointment.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Appointments } from '../Modeles/Appointments';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator'; 
+import { MatPaginator, PageEvent } from '@angular/material/paginator'; 
 import { MatSort } from '@angular/material/sort'; 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmationComponent } from '../confirmation/confirmation.component';
 import { PatientService } from '../Services/Patient.service';
-
+import { CreateRDVComponent } from '../create-rdv/create-rdv.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-appointments',
   templateUrl: './appointments.component.html',
-  styleUrl: './appointments.component.css'
+  styleUrls: ['./appointments.component.css'] // Utilise `styleUrls` au lieu de `styleUrl`
 })
 
 export class AppointmentsComponent implements OnInit {
-AjouterRDV() {
-throw new Error('Method not implemented.');
-}
-openDialogForEdit(arg0: any) {
-throw new Error('Method not implemented.');
-}
-  constructor(private PS: PatientService , private AS: AppointmentsService, private router: Router, private activatedRoute: ActivatedRoute, private dialog:MatDialog) { }
+
+  constructor(private PS: PatientService , private AS: AppointmentsService, private router: Router, private activatedRoute: ActivatedRoute, private dialog: MatDialog) { }
+
   displayedColumns: string[] = ['id', 'patient_id', 'appointment_date', 'reason', 'status' , 'actions'];
   form!: FormGroup;
   appointments: Appointments[] = []; 
-  dataSource = new MatTableDataSource<Appointments>(this.appointments);
+  dataSource = new MatTableDataSource<Appointments>(); // Ne pas initialiser avec `this.appointments`
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   ngOnInit(): void {
     const idFromUrl = this.activatedRoute.snapshot.params['id'];
 
@@ -40,35 +39,35 @@ throw new Error('Method not implemented.');
     } else {
       this.getAppointments();
       this.initFormForAdd();
-      
     }
   }
 
-  addAppointment(): void {
-    const appointmentToSave = this.form.value;
-    this.AS.ajouterAppointment(appointmentToSave).subscribe(() => {
-      this.router.navigate(['/appointments']);
-    });
-  }
+  onPageChange(event: PageEvent): void {
+    this.paginator.pageIndex = event.pageIndex;
+    this.paginator.pageSize = event.pageSize;
+    this.getAppointments();
+  } 
 
   getAppointments(): void {
     this.AS.getAppointments().subscribe((appointments) => {
-      // Loop through each appointment
-      appointments.forEach((appointment) => {
-        // Retrieve patient details for each appointment
-        this.PS.GetPatientByID(appointment.patient_id).subscribe((patient) => {
-          // Assign patient name and last name to the appointment object
-          appointment.patient_id = patient.first_name  + " " + patient.last_name;;
-        
-          // Add the appointment to the array
-          this.appointments.push(appointment);
-          // Update the data source
-          this.dataSource.data = this.appointments;
+      const observables = appointments.map(appointment =>
+        this.PS.GetPatientByID(appointment.patient_id)
+      );
+  
+      forkJoin(observables).subscribe(patients => {
+        appointments.forEach((appointment, index) => {
+          appointment.patient_id = patients[index].first_name + " " + patients[index].last_name;
         });
+  
+        // Assign appointments to the array
+        this.appointments = appointments;
+  
+        // Update the data source after populating appointments
+        this.dataSource.data = this.appointments;
+        this.dataSource.paginator = this.paginator;
       });
     });
   }
-
 
   deleteAppointment(id: string): void {
     let dialogRef = this.dialog.open(ConfirmationComponent, {
@@ -82,15 +81,6 @@ throw new Error('Method not implemented.');
           this.getAppointments();
         });
       }
-    });
-    
-  }
-  
-
-  UpdateAppointment(): void {
-    const UpdateAppointment = this.form.value;
-    this.AS.editAppointment(UpdateAppointment).subscribe(() => {
-      this.router.navigate(['/appointments']);
     });
   }
 
@@ -121,5 +111,50 @@ throw new Error('Method not implemented.');
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  
+  AjouterRDV() {
+    console.log('Entering AjouterPatient() method');
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.width = '1000';
+    dialogConfig.height = '1000';
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.closeOnNavigation = true;
+    dialogConfig.panelClass = 'center-dialog';
+    console.log('Dialog configuration set up');
+
+    const dialogRef = this.dialog.open(CreateRDVComponent, dialogConfig);
+    console.log('Dialog opened');
+
+    dialogRef.afterClosed().subscribe(result => {
+        console.log('Dialog closed with result:', result);
+        if (result === 'success') {
+            console.log('Result is success. Calling getAppointments()');
+            this.getAppointments();
+        } else {
+            console.log('Result is not success.');
+        }
+    });
+  }
+
+  openDialogForEdit(id: string): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.width = '1000';
+    dialogConfig.height = '3000';
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.closeOnNavigation = true;
+    dialogConfig.panelClass = 'center-dialog';
+    dialogConfig.data = { id: id }; 
+    const dialogRef = this.dialog.open(CreateRDVComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed with result:', result);
+      if (result === 'success') {
+        this.getAppointments();
+      }
+    });
+  }
+
 }

@@ -1,1 +1,36 @@
-<p>create-rdv works!</p>
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content [formGroup]="form" class="dialog-content">
+
+  <mat-form-field class="full-width">
+    <mat-label>Patient</mat-label>
+    <input matInput placeholder="Nom et Prénom" formControlName="patient_id" [disabled]="true">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Date du RDV</mat-label>
+    <input matInput [matDatepicker]="picker" placeholder="EX : 2024-04-17" formControlName="appointment_date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Raison</mat-label>
+    <input matInput placeholder="Raison" formControlName="reason">
+
+  </mat-form-field>
+
+
+  <mat-form-field class="full-width">
+    <mat-label>Statut</mat-label>
+    <input matInput placeholder="Raison" formControlName="status">
+
+  </mat-form-field>
+
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="close()" class="dialog-button">Fermer</button>
+  <button mat-button (click)="save()" class="dialog-button">Enregistrer</button>
+</mat-dialog-actions>
