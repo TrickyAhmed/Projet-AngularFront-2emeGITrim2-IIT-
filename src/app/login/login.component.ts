@@ -15,7 +15,7 @@ export class LoginComponent {
   constructor(private formBuilder : FormBuilder,  
     private router : Router,  
     private authService : AuthService ) { }
-    model: ILogin = { userid: "arij", password: "arij" }  
+    model: ILogin = { userid: "doula", password: "doula" }  
 
     loginForm!: FormGroup;  
     message!: string;  

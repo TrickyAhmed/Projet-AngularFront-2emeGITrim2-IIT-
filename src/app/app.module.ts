@@ -40,7 +40,9 @@ import { AuthGuard } from './guards/auth.guard';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { LineChartComponent } from './components/line-chart/line-chart.component';
-import { NgChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,7 +63,8 @@ import { NgChartsModule } from 'ng2-charts';
    
   ],
   imports: [
-    NgChartsModule,
+    MatCardModule,
+    BrowserAnimationsModule,
     BaseChartDirective,
     FormsModule,
     MatPaginatorModule,
@@ -93,7 +96,8 @@ import { NgChartsModule } from 'ng2-charts';
     AuthGuard,
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch())
+    provideHttpClient(withFetch()),
+    provideCharts(withDefaultRegisterables())
   ],
   bootstrap: [AppComponent],
 })

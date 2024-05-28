@@ -1,20 +1,57 @@
 <div class="mx-auto-320px pt-3">
-    <h6>
-      Financial Highlights
-    </h6>
-    <h1>
-      BWX Technologies
-    </h1>
-  
-    <hr class="mb-2">
-  </div>
+  <h6>
+  </h6>
+  <h1>
+Cabinet Dr. Med Chokri Triki  
+  </h1>
 
+  <hr class="mb-2">
+</div>
+
+<div class="charts-container">
   <div class="chart-wrapper">
     <canvas baseChart
-            [type]="'barController'"
-      [datasets]="chartData"
-      [labels]="chartLabels"
-      [options]="chartOptions"
-      >
+            [type]="'pie'"
+            [datasets]="chartData2"
+            [labels]="chartLabels2"
+            [options]="chartOptions">
     </canvas>
   </div>
+  <div class="chart-wrapper">
+    <canvas baseChart
+            [type]="'pie'"
+            [datasets]="chartData"
+            [labels]="chartLabels"
+            [options]="chartOptions">
+    </canvas>
+  </div>
+  <div class="chart-wrapper">
+    <canvas baseChart
+            [type]="'bar'"
+            [datasets]="chartData1"
+            [labels]="chartLabels1"
+            [options]="chartOptions">
+    </canvas>
+  </div>
+</div>
+
+<div class="cards-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Nombre Total des Rendez Vous</mat-card-title>
+      <mat-card-subtitle>{{Nb_Appointments}}</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Nombre Total des patients actifs</mat-card-title>
+      <mat-card-subtitle>{{Nb_Patients}}</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Nombre total des fiches Médicaux</mat-card-title>
+      <mat-card-subtitle>{{Nb_Recoreds}}</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+</div>
